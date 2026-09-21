@@ -61,14 +61,9 @@ internal sealed class AppSettings
     {
         try
         {
-            if (File.Exists(FilePath))
+            if (File.Exists(FilePath) && TryFromJson(File.ReadAllText(FilePath)) is AppSettings loaded)
             {
-                var loaded = JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(FilePath), Options);
-                if (loaded is not null)
-                {
-                    loaded.Normalize();
-                    return loaded;
-                }
+                return loaded;
             }
         }
         catch (Exception)
@@ -83,7 +78,25 @@ internal sealed class AppSettings
     {
         Normalize();
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
-        File.WriteAllText(FilePath, JsonSerializer.Serialize(this, Options));
+        File.WriteAllText(FilePath, ToJson());
+    }
+
+    /// <summary>The on-disk shape. Internal so tests can round-trip without touching %APPDATA%.</summary>
+    internal string ToJson() => JsonSerializer.Serialize(this, Options);
+
+    /// <summary>Reads settings back from JSON, returning null if the text cannot be used.</summary>
+    internal static AppSettings? TryFromJson(string json)
+    {
+        try
+        {
+            AppSettings? loaded = JsonSerializer.Deserialize<AppSettings>(json, Options);
+            loaded?.Normalize();
+            return loaded;
+        }
+        catch (JsonException)
+        {
+            return null;
+        }
     }
 
     public AppSettings Clone()

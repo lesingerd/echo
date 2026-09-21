@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <AssemblyName>Echo.InteractiveTests</AssemblyName>
+    <RootNamespace>EchoTray.InteractiveTests</RootNamespace>
+
+    <IsPackable>false</IsPackable>
+    <!-- Not a test project: "dotnet test" must never pick this up and start driving the desktop. -->
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Echo.csproj" />
+  </ItemGroup>
+
+</Project>

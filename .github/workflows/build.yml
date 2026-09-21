@@ -1,0 +1,30 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    # Echo is a Windows-only WinForms app; net9.0-windows will not build anywhere else.
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore Echo.sln
+
+      - name: Build
+        run: dotnet build Echo.sln --configuration Release --no-restore
+
+      # Only the unit tests. The suites under tools/ drive the mouse, steal focus and type into
+      # windows, so they need a real desktop session and never run here. See tests/README.md.
+      - name: Unit tests
+        run: dotnet test tests/Echo.Tests/Echo.Tests.csproj --configuration Release --no-build --verbosity normal
