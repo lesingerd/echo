@@ -23,4 +23,21 @@
     <DebugType>embedded</DebugType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- This project sits at the repository root, so its default globs would otherwise pull in
+         the sources of the projects under tests/ and tools/. -->
+    <Compile Remove="tests/**" />
+    <Compile Remove="tools/**" />
+    <None Remove="tests/**" />
+    <None Remove="tools/**" />
+    <EmbeddedResource Remove="tests/**" />
+    <EmbeddedResource Remove="tools/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Echo's types are internal; the test projects see them rather than linking the sources. -->
+    <InternalsVisibleTo Include="Echo.Tests" />
+    <InternalsVisibleTo Include="Echo.InteractiveTests" />
+  </ItemGroup>
+
 </Project>

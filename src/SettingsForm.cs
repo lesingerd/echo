@@ -267,7 +267,8 @@ internal sealed class SettingsForm : Form
         _balloons.Checked = settings.ShowBalloons;
     }
 
-    private bool TrySaveInto(AppSettings settings)
+    /// <summary>Internal so the interactive suite can check the dialog round-trips its values.</summary>
+    internal bool TrySaveInto(AppSettings settings)
     {
         var presets = new List<int>();
         foreach (string part in _presets.Text.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries))

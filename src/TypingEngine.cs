@@ -126,8 +126,11 @@ internal static class TypingEngine
         return TypeResult.Completed;
     }
 
-    /// <summary>Normalises line endings and applies the newline/tab preferences up front.</summary>
-    private static string Prepare(string text, AppSettings settings)
+    /// <summary>
+    /// Normalises line endings and applies the newline/tab preferences up front.
+    /// Internal so it can be tested without a window to type into.
+    /// </summary>
+    internal static string Prepare(string text, AppSettings settings)
     {
         string normalized = text.Replace("\r\n", "\n").Replace('\r', '\n');
         if (settings.TrimTrailingNewlines)
